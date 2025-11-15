@@ -21,8 +21,9 @@ function listener() {
           email: currentAuth.email || "",
           role: currentAuth.role || "",
           id: currentAuth.id || "",
+          dinasName: currentAuth.dinasName || "",
         }),
-        { expires: 7 / 24 } 
+        { expires: 7 / 24 }
       );
     } else {
       Cookies.remove("token");
@@ -30,6 +31,7 @@ function listener() {
       Cookies.remove("email");
       Cookies.remove("role");
       Cookies.remove("id");
+      Cookies.remove("dinasName");
     }
   }
 }

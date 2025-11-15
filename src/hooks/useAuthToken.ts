@@ -7,6 +7,7 @@ type AuthPayload = {
   email: string;
   role: string;
   id: string;
+  dinasName: string;
 };
 
 const useAuthToken = (): Partial<AuthPayload> => {
@@ -26,6 +27,7 @@ const useAuthToken = (): Partial<AuthPayload> => {
     email: auth?.email,
     role: auth?.role,
     id: auth?.id,
+    dinasName: auth?.dinasName,
   };
 };
 

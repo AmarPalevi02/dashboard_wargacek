@@ -19,17 +19,22 @@ import BarChart from "../pages/Charts/BarChart";
 import SignIn from "../pages/AuthPages/SignIn";
 import SignUp from "../pages/AuthPages/SignUp";
 import NotFound from "../pages/OtherPage/NotFound";
+import Laporan from "../pages/Laporants/Laporan";
+import PageMaps from "../pages/Maps";
+import PublicRoute from "./PublicRoute";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoute = () => {
   return (
     <>
-      '
       <Router>
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             <Route index path="/home" element={<Home />} />
+            <Route path="/laporan" element={<Laporan />} />
+            <Route path="/maps" element={<PageMaps />} />
 
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
@@ -63,8 +68,72 @@ const AppRoute = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-      ;
     </>
+
+    // <>
+    //   <Router>
+    //     <ScrollToTop />
+    //     <Routes>
+    //       {/* Dashboard Layout - Protected Routes */}
+    //       <Route
+    //         path="/*"
+    //         element={
+    //           <ProtectedRoute>
+    //             <AppLayout />
+    //           </ProtectedRoute>
+    //         }
+    //       >
+    //         <Route path="home" element={<Home />} />
+    //         <Route path="laporan" element={<Laporan />} />
+    //         <Route path="maps" element={<PageMaps />} />
+
+    //         {/* Others Page */}
+    //         <Route path="profile" element={<UserProfiles />} />
+    //         <Route path="calendar" element={<Calendar />} />
+    //         <Route path="blank" element={<Blank />} />
+
+    //         {/* Forms */}
+    //         <Route path="form-elements" element={<FormElements />} />
+
+    //         {/* Tables */}
+    //         <Route path="basic-tables" element={<BasicTables />} />
+
+    //         {/* Ui Elements */}
+    //         <Route path="alerts" element={<Alerts />} />
+    //         <Route path="avatars" element={<Avatars />} />
+    //         <Route path="badge" element={<Badges />} />
+    //         <Route path="buttons" element={<Buttons />} />
+    //         <Route path="images" element={<Images />} />
+    //         <Route path="videos" element={<Videos />} />
+
+    //         {/* Charts */}
+    //         <Route path="line-chart" element={<LineChart />} />
+    //         <Route path="bar-chart" element={<BarChart />} />
+    //       </Route>
+
+    //       {/* Auth Layout - Public Routes */}
+    //       <Route
+    //         path="/"
+    //         element={
+    //           <PublicRoute>
+    //             <SignIn />
+    //           </PublicRoute>
+    //         }
+    //       />
+    //       <Route
+    //         path="/signup"
+    //         element={
+    //           <PublicRoute>
+    //             <SignUp />
+    //           </PublicRoute>
+    //         }
+    //       />
+
+    //       {/* Fallback Route */}
+    //       <Route path="*" element={<NotFound />} />
+    //     </Routes>
+    //   </Router>
+    // </>
   );
 };
 

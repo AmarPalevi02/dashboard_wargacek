@@ -4,12 +4,13 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { config } from "../../configs/configs";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../redux/auth/action";
 import { postData } from "../../utils/fetch";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
+import Alert from "../ui/alert/Alert";
+import { extractErrorMessage } from "../../utils/handleApiError";
 
 type Inputs = {
   email: string;
@@ -23,11 +24,17 @@ type LoginResponse = {
     email: string;
     role: string;
     id: string;
+    dinasName: string;
   };
 };
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [alert, setAlert] = useState<{
+    variant: "success" | "error" | "warning" | "info";
+    title: string;
+    message: string;
+  } | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -35,9 +42,6 @@ export default function SignInForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-
-  console.log(config.base_url);
-  console.log(config.version);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -49,25 +53,45 @@ export default function SignInForm() {
         email: res.data.user.email,
         role: res.data.user.role,
         id: res.data.user.id,
+        dinasName: res.data.user.dinasName,
       };
 
       Cookies.set("auth", JSON.stringify(authPayload));
 
       dispatch(userLogin(authPayload));
 
-      navigate("/home");
+      setAlert({
+        variant: "success",
+        title: "Login berhasil",
+        message: `Selamat datang, ${res.data.user.username}!`,
+      });
 
-      console.log("Login sukses:", res.data);
-    } catch (err: any) {
-      // setErrorMsg(err.message || "Login gagal");
-    } finally {
-      // setLoading(false);
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+    } catch (error: unknown) {
+      const errorMessage = extractErrorMessage(error);
+      setAlert({
+        variant: "error",
+        title: "Login gagal",
+        message: errorMessage,
+      });
     }
   };
 
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+        {alert && (
+          <div className="mb-4">
+            <Alert
+              variant={alert.variant}
+              title={alert.title}
+              message={alert.message}
+            />
+          </div>
+        )}
+
         <div>
           <div className="mb-5 sm:mb-8">
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
@@ -78,6 +102,7 @@ export default function SignInForm() {
             </p>
           </div>
           <div>
+            
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-6">
                 <div>

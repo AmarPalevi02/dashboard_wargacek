@@ -12,6 +12,7 @@ const initialState: AuthState = {
   email: null,
   role: null,
   id: null,
+  dinasName: null
 };
 
 export function authReducer (
