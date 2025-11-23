@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { userLogin } from "../../redux/auth/action";
 import { postData } from "../../utils/fetch";
 import { useNavigate } from "react-router";
-import Cookies from "js-cookie";
 import Alert from "../ui/alert/Alert";
 import { extractErrorMessage } from "../../utils/handleApiError";
 
@@ -56,7 +55,7 @@ export default function SignInForm() {
         dinasName: res.data.user.dinasName,
       };
 
-      Cookies.set("auth", JSON.stringify(authPayload));
+      console.log("Login successful, dispatching:", authPayload);
 
       dispatch(userLogin(authPayload));
 
@@ -66,8 +65,13 @@ export default function SignInForm() {
         message: `Selamat datang, ${res.data.user.username}!`,
       });
 
+      // Redirect berdasarkan role
       setTimeout(() => {
-        navigate("/home");
+        if (res.data.user.role === "ADMIN") {
+          navigate("/admin");
+        } else if (res.data.user.role === "DINAS") {
+          navigate("/dinas");
+        } 
       }, 1000);
     } catch (error: unknown) {
       const errorMessage = extractErrorMessage(error);
@@ -102,7 +106,6 @@ export default function SignInForm() {
             </p>
           </div>
           <div>
-            
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="space-y-6">
                 <div>

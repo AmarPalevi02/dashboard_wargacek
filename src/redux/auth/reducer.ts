@@ -24,15 +24,19 @@ export function authReducer (
       return {
         ...state,
         isAuthenticated: true,
-        ...action.payload,
+        token: action.payload.token,
+        username: action.payload.username,
+        email: action.payload.email,
+        role: action.payload.role,
+        id: action.payload.id,
+        dinasName: action.payload.dinasName,
       };
     case USER_LOGOUT:
+      console.log("USER_LOGOUT reducer");
       return initialState;
     default:
       return state;
   }
 };
 
-
 export default authReducer;
-

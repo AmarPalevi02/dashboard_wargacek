@@ -3,26 +3,19 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 import { ScrollToTop } from "../components/common/ScrollToTop";
 import AppLayout from "../layout/AppLayout";
 import Home from "../pages/Dashboard/Home";
-import UserProfiles from "../pages/UserProfiles";
-import Blank from "../pages/Blank";
-import Calendar from "../pages/Calendar";
-import FormElements from "../pages/Forms/FormElements";
-import BasicTables from "../pages/Tables/BasicTables";
-import Alerts from "../pages/UiElements/Alerts";
-import Avatars from "../pages/UiElements/Avatars";
-import Badges from "../pages/UiElements/Badges";
-import Buttons from "../pages/UiElements/Buttons";
-import Images from "../pages/UiElements/Images";
-import Videos from "../pages/UiElements/Videos";
-import LineChart from "../pages/Charts/LineChart";
-import BarChart from "../pages/Charts/BarChart";
 import SignIn from "../pages/AuthPages/SignIn";
 import SignUp from "../pages/AuthPages/SignUp";
 import NotFound from "../pages/OtherPage/NotFound";
 import Laporan from "../pages/Laporants/Laporan";
 import PageMaps from "../pages/Maps";
-import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
+
+// Admin Pages
+import AdminPage from "../pages/Admin";
+import ManageDInas from "../pages/Admin/ManageDInas/ManageDInas";
+import PageJenisKerusakan from "../pages/Admin/JenisKerusakan/PageJenisKerusakan";
+import Laporans from "../pages/Admin/Laporan/Laporans";
 
 const AppRoute = () => {
   return (
@@ -30,110 +23,98 @@ const AppRoute = () => {
       <Router>
         <ScrollToTop />
         <Routes>
-          {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
-            <Route index path="/home" element={<Home />} />
-            <Route path="/laporan" element={<Laporan />} />
-            <Route path="/maps" element={<PageMaps />} />
+          {/* Public Routes - Hanya bisa diakses jika belum login */}
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <SignIn />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute>
+                <SignUp />
+              </PublicRoute>
+            }
+          />
 
-            {/* Others Page */}
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} />
+          {/* Protected Routes - Hanya bisa diakses jika sudah login */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
 
-            {/* Forms */}
-            <Route path="/form-elements" element={<FormElements />} />
+            {/* Admin Only Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/manage-dinas"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <ManageDInas />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/jenis-kerusakan"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <PageJenisKerusakan />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/laporans"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <Laporans />
+                </ProtectedRoute>
+              }
+            />
 
-            {/* Tables */}
-            <Route path="/basic-tables" element={<BasicTables />} />
-
-            {/* Ui Elements */}
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badge" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} />
-
-            {/* Charts */}
-            <Route path="/line-chart" element={<LineChart />} />
-            <Route path="/bar-chart" element={<BarChart />} />
+            {/* Dinas Only Routes */}
+            <Route
+              path="/dinas"
+              element={
+                <ProtectedRoute allowedRoles={["DINAS"]}>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dinas/maps"
+              element={
+                <ProtectedRoute allowedRoles={["DINAS"]}>
+                  <PageMaps />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dinas/laporan"
+              element={
+                <ProtectedRoute allowedRoles={["DINAS"]}>
+                  <Laporan />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
-          {/* Auth Layout */}
-          <Route path="/" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-
-          {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </>
-
-    // <>
-    //   <Router>
-    //     <ScrollToTop />
-    //     <Routes>
-    //       {/* Dashboard Layout - Protected Routes */}
-    //       <Route
-    //         path="/*"
-    //         element={
-    //           <ProtectedRoute>
-    //             <AppLayout />
-    //           </ProtectedRoute>
-    //         }
-    //       >
-    //         <Route path="home" element={<Home />} />
-    //         <Route path="laporan" element={<Laporan />} />
-    //         <Route path="maps" element={<PageMaps />} />
-
-    //         {/* Others Page */}
-    //         <Route path="profile" element={<UserProfiles />} />
-    //         <Route path="calendar" element={<Calendar />} />
-    //         <Route path="blank" element={<Blank />} />
-
-    //         {/* Forms */}
-    //         <Route path="form-elements" element={<FormElements />} />
-
-    //         {/* Tables */}
-    //         <Route path="basic-tables" element={<BasicTables />} />
-
-    //         {/* Ui Elements */}
-    //         <Route path="alerts" element={<Alerts />} />
-    //         <Route path="avatars" element={<Avatars />} />
-    //         <Route path="badge" element={<Badges />} />
-    //         <Route path="buttons" element={<Buttons />} />
-    //         <Route path="images" element={<Images />} />
-    //         <Route path="videos" element={<Videos />} />
-
-    //         {/* Charts */}
-    //         <Route path="line-chart" element={<LineChart />} />
-    //         <Route path="bar-chart" element={<BarChart />} />
-    //       </Route>
-
-    //       {/* Auth Layout - Public Routes */}
-    //       <Route
-    //         path="/"
-    //         element={
-    //           <PublicRoute>
-    //             <SignIn />
-    //           </PublicRoute>
-    //         }
-    //       />
-    //       <Route
-    //         path="/signup"
-    //         element={
-    //           <PublicRoute>
-    //             <SignUp />
-    //           </PublicRoute>
-    //         }
-    //       />
-
-    //       {/* Fallback Route */}
-    //       <Route path="*" element={<NotFound />} />
-    //     </Routes>
-    //   </Router>
-    // </>
   );
 };
 
